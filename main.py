@@ -3,11 +3,9 @@ import tkinter as tk
 from PIL import Image, ImageTk
 
 
+url = input("Enter the url or message you want to encode: ")
 
-
-
-
-img = qrcode.make("https://www.roblox.com/games/292439477/Phantom-Forces")
+img = qrcode.make(url)
 img.save("PhantomForces.jpg")
 
 
