@@ -6,8 +6,9 @@ from PIL import Image, ImageTk
 import cv2
 
 def generateCode():
-    msg = input("Enter the url or message you want to encode: ")
-    print("\nDouble-check to make sure there are no typos!\n")
+    msg = input("_________________________\n\nEnter the url or message you want to encode: ")
+    print("\nDouble-check to make sure there are no typos! Resize the window if you have to. Scan the code to check if it's right!\n")
+    print("Close the pop-up to exit the program.\n_________________________\n")
 
     img = qrcode.make(msg)
     imageName = "QR_Code.jpg"
@@ -19,19 +20,21 @@ def generateCode():
 
     im=Image.open(imageName)  
     photo=ImageTk.PhotoImage(im)  
-    cv = tk.Canvas()  
+    cv = tk.Canvas()
     cv.pack(side='top', fill='both', expand='yes')  
-    cv.create_image(10, 10, image=photo, anchor='nw')  
+    cv.create_image(10, 10, image=photo, anchor='nw') 
 
     window.mainloop()
 
 
 def readCode():
-   print("Open your image file from the dialog")
-   window = tk.Tk()
-   button = tk.Button(text="Open File", command=processFile)
-   button.pack()
-   window.mainloop()
+    print("_________________________\n\nOpen your image file from the pop-up dialog.")
+    window = tk.Tk()
+    window.title("Open Your Image File")
+    window.geometry("300x20")
+    button = tk.Button(window, text="Open File", command=processFile)
+    button.pack()
+    window.mainloop()
 
 
 def processFile():
@@ -41,17 +44,22 @@ def processFile():
     
     reader = cv2.QRCodeDetector()
     val, points, straight_qrcode = reader.detectAndDecode(img)
-    print("Here is the decoded message:\n\n" + val + "\n")
+    print("\nHere is the decoded message (If your message is empty, it is likely that the image was not a valid QR Code):\n_________________________\n\n\n" + val + "\n\n_________________________\n\nClose the pop-up to exit the program.\n_________________________\n")
     
     file.close()
 
 
-choice = input("QR Code Generator/Reader\nEnter '1' to Generate a Code\nEnter '2' to Read a Code >>> ")
+def run():
+    choice = input("\n_________________________\n\nQR Code Generator/Reader\n_________________________\n\n--> Enter '1' to Generate a Code\n--> Enter '2' to Read a Code\n--> ")
 
-match choice:
-    case "1": 
-        generateCode()
-    case "2":
-        readCode()
-    case _: 
-      print("There was an error in input. Please re-run the code.")
+    match choice:
+        case "1": 
+            generateCode()
+        case "2":
+            readCode()
+        case _: 
+            print("There was an error in input. Please re-run the code.")
+            run()
+
+#Main
+run()
